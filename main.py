@@ -36,17 +36,17 @@ centreFrame = Frame(
     height = utilities.height_prct(75)
 )
 
+centreFrame.place(x=utilities.width_prct(25), y=utilities.height_prct(25))
 
 for x in range(settings.gridSize):
     for y in range(settings.gridSize):
-        c = Cell()
+        c = Cell(x, y)
         c.createButton(centreFrame)
         c.btnObject.grid(
             column=x, row=y
         )
 
 
-
-centreFrame.place(x=utilities.width_prct(25), y=utilities.height_prct(25))
+Cell.randomiseMines()
 
 root.mainloop() # Runs window until closed by user
