@@ -30,6 +30,9 @@ class Cell:
         if self.Mine: 
             self.showMine()
         else:
+            if self.surroundedMines == 0:
+                for cell in self.surroundedCells:
+                    cell.showCell()
             self.showCell()
 
     def showMine(self):
