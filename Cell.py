@@ -5,6 +5,8 @@ import random
 # Creating cell object
 class Cell:
     all = []
+    allZero = []
+    unvisitedZero = []
     def __init__(self, x, y, Mine=False):
         self.Mine = Mine
         self.btnObject = None
@@ -30,10 +32,24 @@ class Cell:
         if self.Mine: 
             self.showMine()
         else:
+            self.showCell()
             if self.surroundedMines == 0:
+                Cell.allZero.append(self)
                 for cell in self.surroundedCells:
                     cell.showCell()
-            self.showCell()
+                    if cell.surroundedMines == 0:
+                        Cell.allZero.append(cell)
+                        Cell.unvisitedZero.append(cell)
+
+                while len(Cell.unvisitedZero) > 0:
+                    for cell in Cell.unvisitedZero[0].surroundedCells:
+                        cell.showCell()
+                        if cell.surroundedMines == 0 and cell not in Cell.allZero:
+                            Cell.allZero.append(cell)
+                            Cell.unvisitedZero.append(cell)
+                    del Cell.unvisitedZero[0]
+
+            
 
     def showMine(self):
         self.btnObject.configure(bg='red')

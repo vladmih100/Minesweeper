@@ -8,7 +8,7 @@ root = Tk() # Creates window
 root.configure(bg='black') # Set background colour
 root.geometry(f'{settings.width}x{settings.height}') # Sets window size
 root.title('Minesweeper') # Sets window title
-root.resizable(False, False) # Prevents resizing of window
+#root.resizable(False, False) # Prevents resizing of window
 
 ### Creating Frames ###
 topFrame = Frame(
