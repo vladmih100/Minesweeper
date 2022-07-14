@@ -46,6 +46,11 @@ for x in range(settings.gridSize):
             column=x, row=y
         )
 
+# Call cell label:
+Cell.createCountLabel(leftFrame)
+Cell.cellCountlab.place(
+    x=0, y=0
+    )
 
 Cell.randomiseMines()
 

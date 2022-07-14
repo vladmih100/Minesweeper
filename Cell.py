@@ -1,17 +1,23 @@
-from tkinter import Button
+from tkinter import Button, Label
 import settings
 import random
+import ctypes
+import sys
 
 # Creating cell object
 class Cell:
     all = []
     allZero = []
     unvisitedZero = []
+    cellCount = settings.cellCount
+    cellCountlab = None
     def __init__(self, x, y, Mine=False):
         self.Mine = Mine
         self.btnObject = None
         self.x = x
         self.y = y
+        self.opened = False
+        self.marked = False
 
         Cell.all.append(self)
 
@@ -19,12 +25,25 @@ class Cell:
     def createButton(self, location):
         btn = Button(
             location,
-            width=10,
-            height=3,
+            width=1,
+            height=1,
         )
         btn.bind('<Button-1>', self.leftClick) # Left click action
         btn.bind('<Button-3>', self.rightClick) # Roght click action
         self.btnObject = btn
+
+    @staticmethod
+    def createCountLabel(location):
+        lbl = Label(
+            location,
+            bg='black',
+            fg='white',
+            font = ("", 30),
+            text=f'Cells left: {Cell.cellCount}'
+        )
+
+        Cell.cellCountlab = lbl
+
 
     # Left click actions
     def leftClick(self, event):
@@ -52,7 +71,12 @@ class Cell:
             
 
     def showMine(self):
+        # End game if mine is clicked
         self.btnObject.configure(bg='red')
+        ctypes.windll.user32.MessageBoxW(0, "You're dead bro", "Game Over", 0)
+        sys.exit()
+        
+
 
     def getCell(self, x, y):
         for cell in Cell.all:
@@ -86,11 +110,28 @@ class Cell:
         return count
 
     def showCell(self):
-        self.btnObject.configure(text=self.surroundedMines)
+        if not self.opened:
+            Cell.cellCount -= 1
+            self.btnObject.configure(text=self.surroundedMines)
+            # Update cell count label
+            if Cell.cellCountlab:
+                Cell.cellCountlab.configure(
+                    text=f'Cells left: {Cell.cellCount}'
+                    )
+        # Cell is marked as opened
+        self.opened = True
 
     def rightClick(self, event):
-        print(event)
-        print("I am right clicked")
+        if not self.marked:
+            self.btnObject.configure(
+                bg='aqua'
+                )
+            self.marked = True
+        else:
+            self.btnObject.configure(
+                bg='SystemButtonFace'
+                )
+            self.marked = False
 
     @staticmethod
     def randomiseMines():
