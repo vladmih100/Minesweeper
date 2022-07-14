@@ -67,17 +67,19 @@ class Cell:
                             Cell.allZero.append(cell)
                             Cell.unvisitedZero.append(cell)
                     del Cell.unvisitedZero[0]
+            if Cell.cellCount == settings.mineCount:
+                ctypes.windll.user32.MessageBoxW(0, "You won!!", "Game Over", 0)
+                
 
+        self.btnObject.unbind('<Button-1>')
+        self.btnObject.unbind('<Button-3>')
             
-
     def showMine(self):
         # End game if mine is clicked
         self.btnObject.configure(bg='red')
         ctypes.windll.user32.MessageBoxW(0, "You're dead bro", "Game Over", 0)
         sys.exit()
         
-
-
     def getCell(self, x, y):
         for cell in Cell.all:
             if cell.x == x and cell.y == y:
@@ -120,6 +122,9 @@ class Cell:
                     )
         # Cell is marked as opened
         self.opened = True
+        self.btnObject.configure(
+            bg="SystemButtonFace"
+        )
 
     def rightClick(self, event):
         if not self.marked:
